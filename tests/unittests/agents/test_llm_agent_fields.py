@@ -227,8 +227,35 @@ def test_before_model_callback():
       name='test_agent', before_model_callback=_before_model_callback
   )
 
-  # TODO: add more logic assertions later.
-  assert agent.before_model_callback is not None
+  assert agent.before_model_callback is _before_model_callback
+  assert agent.canonical_before_model_callbacks == [_before_model_callback]
+
+
+def test_before_model_callbacks():
+  def _before_model_callback_1(
+      callback_context: CallbackContext,
+      llm_request: LlmRequest,
+  ) -> None:
+    return None
+
+  def _before_model_callback_2(
+      callback_context: CallbackContext,
+      llm_request: LlmRequest,
+  ) -> None:
+    return None
+
+  callbacks = [_before_model_callback_1, _before_model_callback_2]
+  agent = LlmAgent(name='test_agent', before_model_callback=callbacks)
+
+  assert agent.before_model_callback == callbacks
+  assert agent.canonical_before_model_callbacks == callbacks
+
+
+def test_no_before_model_callback():
+  agent = LlmAgent(name='test_agent')
+
+  assert agent.before_model_callback is None
+  assert not agent.canonical_before_model_callbacks
 
 
 def test_validate_generate_content_config_thinking_config_throw():
