@@ -115,17 +115,33 @@ class VertexAiMemoryBankService(BaseMemoryService):
 
     memory_events = []
     for memory in api_response.get('retrievedMemories', []):
-      # TODO: add more complex error handling
-      memory_events.append(
-          MemoryEntry(
-              author='user',
-              content=types.Content(
-                  parts=[types.Part(text=memory.get('memory').get('fact'))],
-                  role='user',
-              ),
-              timestamp=memory.get('updateTime'),
+      try:
+        memory_data = memory.get('memory')
+        if not memory_data:
+          logger.warning(
+              'Skipping memory entry with missing or empty "memory" field: %s',
+              memory,
           )
-      )
+          continue
+
+        fact = memory_data.get('fact')
+        if not fact:
+          logger.warning('Skipping memory entry with missing "fact": %s', memory)
+          continue
+
+        memory_events.append(
+            MemoryEntry(
+                author='user',
+                content=types.Content(
+                    parts=[types.Part(text=fact)],
+                    role='user',
+                ),
+                timestamp=memory.get('updateTime'),
+            )
+        )
+      except Exception as e:  # pylint: disable=broad-exception-caught
+        logger.error('Error processing memory entry: %s, error: %s', memory, e)
+        continue
     return SearchMemoryResponse(memories=memory_events)
 
   def _get_api_client(self):
