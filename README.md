@@ -142,6 +142,11 @@ We welcome contributions from the community! Whether it's bug reports, feature r
 
 This project is licensed under the Apache 2.0 License - see the [LICENSE](LICENSE) file for details.
 
+## 🇭🇺 Hungarian Joke
+
+Q: Miért nincs a póknak telefonja? (Why does the spider not have a phone?)
+A: Mert belemegy a hálóba. (Because it gets caught in the web / network.)
+
 ---
 
 *Happy Agent Building!*
