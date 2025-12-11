@@ -14,6 +14,7 @@
 
 from __future__ import annotations
 
+import asyncio
 import inspect
 from typing import Any
 from typing import Callable
@@ -115,7 +116,7 @@ You could retry calling this tool, but it is IMPORTANT for you to provide all th
     ):
       return await self.func(**args_to_call)
     else:
-      return self.func(**args_to_call)
+      return await asyncio.to_thread(self.func, **args_to_call)
 
   # TODO(hangfei): fix call live for function stream.
   async def _call_live(
