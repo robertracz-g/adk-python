@@ -14,6 +14,8 @@
 
 from __future__ import annotations
 
+import asyncio
+import functools
 from typing import Any
 from typing import Dict
 from typing import List
@@ -388,7 +390,10 @@ class RestApiTool(BaseTool):
 
     # Got all parameters. Call the API.
     request_params = self._prepare_request_params(api_params, api_args)
-    response = requests.request(**request_params)
+    loop = asyncio.get_running_loop()
+    response = await loop.run_in_executor(
+        None, functools.partial(requests.request, **request_params)
+    )
 
     # Parse API response
     try:
