@@ -1,0 +1,54 @@
+[
+  {
+    "title": "Blocking Sync Function Calls in Async FunctionTool",
+    "description": "FunctionTool.run_async executes synchronous functions directly in the event loop, blocking it.",
+    "deepLink": "https://github.com/robertracz-g/adk-python/blob/d4f01afc154461753a8063db5206679783609a36/src/google/adk/tools/function_tool.py#L113",
+    "filePath": "src/google/adk/tools/function_tool.py",
+    "lineNumber": 113,
+    "confidence": 1,
+    "rationale": "Clear fix available using asyncio.to_thread or run_in_executor. High impact as it blocks the main loop.",
+    "context": "    if (\n        inspect.iscoroutinefunction(self.func)\n        or hasattr(self.func, '__call__')\n        and inspect.iscoroutinefunction(self.func.__call__)\n    ):\n      return await self.func(**args_to_call)\n    else:\n      return self.func(**args_to_call)",
+    "language": "python",
+    "category": "async-io",
+    "estimatedImpact": "high"
+  },
+  {
+    "title": "Blocking Sync HTTP Request in Async RestApiTool",
+    "description": "RestApiTool.call makes a synchronous requests.request call inside an async def.",
+    "deepLink": "https://github.com/robertracz-g/adk-python/blob/d4f01afc154461753a8063db5206679783609a36/src/google/adk/tools/openapi_tool/openapi_spec_parser/rest_api_tool.py#L391",
+    "filePath": "src/google/adk/tools/openapi_tool/openapi_spec_parser/rest_api_tool.py",
+    "lineNumber": 391,
+    "confidence": 1,
+    "rationale": "Clear blocking call in async path. Can be fixed by wrapping in a thread or using an async client.",
+    "context": "    # Got all parameters. Call the API.\n    request_params = self._prepare_request_params(api_params, api_args)\n    response = requests.request(**request_params)\n\n    # Parse API response\n    try:",
+    "language": "python",
+    "category": "async-io",
+    "estimatedImpact": "high"
+  },
+  {
+    "title": "Blocking Sync Call in Async APIHubToolset.get_tools",
+    "description": "APIHubToolset.get_tools calls _prepare_toolset synchronously, which performs blocking network I/O.",
+    "deepLink": "https://github.com/robertracz-g/adk-python/blob/d4f01afc154461753a8063db5206679783609a36/src/google/adk/tools/apihub_tool/apihub_toolset.py#L117",
+    "filePath": "src/google/adk/tools/apihub_tool/apihub_toolset.py",
+    "lineNumber": 117,
+    "confidence": 1,
+    "rationale": "The _prepare_toolset method makes blocking network calls. It should be awaited or run in a thread.",
+    "context": "    Returns:\n        A list of all available RestApiTool objects.\n    \"\"\"\n    if not self._openapi_toolset:\n      self._prepare_toolset()\n    if not self._openapi_toolset:\n      return []",
+    "language": "python",
+    "category": "async-io",
+    "estimatedImpact": "medium"
+  },
+  {
+    "title": "Inefficient Regex Compilation in LLMRegistry",
+    "description": "re.compile is called inside a loop for every model resolution.",
+    "deepLink": "https://github.com/robertracz-g/adk-python/blob/d4f01afc154461753a8063db5206679783609a36/src/google/adk/models/registry.py#L99",
+    "filePath": "src/google/adk/models/registry.py",
+    "lineNumber": 99,
+    "confidence": 2,
+    "rationale": "Regexes should be compiled once at registration time. Fix involves changing the registry storage structure.",
+    "context": "    for regex, llm_class in _llm_registry_dict.items():\n      if re.compile(regex).fullmatch(model):\n        return llm_class\n\n    raise ValueError(f'Model {model} not found.')",
+    "language": "python",
+    "category": "loop-optimization",
+    "estimatedImpact": "medium"
+  }
+]
