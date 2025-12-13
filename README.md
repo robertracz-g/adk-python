@@ -145,3 +145,9 @@ This project is licensed under the Apache 2.0 License - see the [LICENSE](LICENS
 ---
 
 *Happy Agent Building!*
+
+## 🃏 Joke of the day
+
+Why did the AI agent cross the road?
+
+To get to the other dataset!
