@@ -138,6 +138,11 @@ We welcome contributions from the community! Whether it's bug reports, feature r
 - [General contribution guideline and flow](https://google.github.io/adk-docs/contributing-guide/).
 - Then if you want to contribute code, please read [Code Contributing Guidelines](./CONTRIBUTING.md) to get started.
 
+## 😂 Joke
+
+Why do programmers prefer dark mode?
+Because light attracts bugs.
+
 ## 📄 License
 
 This project is licensed under the Apache 2.0 License - see the [LICENSE](LICENSE) file for details.
