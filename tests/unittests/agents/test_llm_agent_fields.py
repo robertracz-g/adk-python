@@ -30,6 +30,8 @@ from google.genai import types
 from pydantic import BaseModel
 import pytest
 
+from .. import testing_utils
+
 
 async def _create_readonly_context(
     agent: LlmAgent, state: Optional[dict[str, Any]] = None
@@ -216,19 +218,31 @@ def test_output_schema_with_tools_will_throw():
     )
 
 
-def test_before_model_callback():
+@pytest.mark.asyncio
+async def test_before_model_callback():
+  responses = ['model_response']
+  mock_model = testing_utils.MockModel.create(responses=responses)
+
+  called = False
+
   def _before_model_callback(
       callback_context: CallbackContext,
       llm_request: LlmRequest,
   ) -> None:
+    nonlocal called
+    called = True
     return None
 
   agent = LlmAgent(
-      name='test_agent', before_model_callback=_before_model_callback
+      name='test_agent',
+      model=mock_model,
+      before_model_callback=_before_model_callback,
   )
 
-  # TODO: add more logic assertions later.
-  assert agent.before_model_callback is not None
+  runner = testing_utils.TestInMemoryRunner(agent)
+  await runner.run_async_with_new_session('test')
+
+  assert called
 
 
 def test_validate_generate_content_config_thinking_config_throw():
