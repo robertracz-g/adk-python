@@ -322,7 +322,9 @@ class ConnectionsClient:
                 "content": {
                     "application/json": {
                         "schema": {
-                            "$ref": f"#/components/schemas/{action_display_name}_Request"
+                            "$ref": (
+                                f"#/components/schemas/{action_display_name}_Request"
+                            )
                         }
                     }
                 }
@@ -333,7 +335,9 @@ class ConnectionsClient:
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": f"#/components/schemas/{action_display_name}_Response",
+                                "$ref": (
+                                    f"#/components/schemas/{action_display_name}_Response"
+                                ),
                             }
                         }
                     },
@@ -352,9 +356,11 @@ class ConnectionsClient:
     return {
         "post": {
             "summary": f"List {entity}",
-            "description": f"""Returns the list of {entity} data. If the page token was available in the response, let users know there are more records available. Ask if the user wants to fetch the next page of results. When passing filter use the
+            "description": (
+                f"""Returns the list of {entity} data. If the page token was available in the response, let users know there are more records available. Ask if the user wants to fetch the next page of results. When passing filter use the
                 following format: `field_name1='value1' AND field_name2='value2'
-                `. {tool_instructions}""",
+                `. {tool_instructions}"""
+            ),
             "x-operation": "LIST_ENTITIES",
             "x-entity": f"{entity}",
             "operationId": f"{tool_name}_list_{entity}",
@@ -379,7 +385,9 @@ class ConnectionsClient:
                                     f"Returns a list of {entity} of json"
                                     f" schema: {schema_as_string}"
                                 ),
-                                "$ref": "#/components/schemas/execute-connector_Response",
+                                "$ref": (
+                                    "#/components/schemas/execute-connector_Response"
+                                ),
                             }
                         }
                     },
@@ -423,7 +431,9 @@ class ConnectionsClient:
                                     f"Returns {entity} of json schema:"
                                     f" {schema_as_string}"
                                 ),
-                                "$ref": "#/components/schemas/execute-connector_Response",
+                                "$ref": (
+                                    "#/components/schemas/execute-connector_Response"
+                                ),
                             }
                         }
                     },
@@ -460,7 +470,9 @@ class ConnectionsClient:
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/execute-connector_Response"
+                                "$ref": (
+                                    "#/components/schemas/execute-connector_Response"
+                                )
                             }
                         }
                     },
@@ -497,7 +509,9 @@ class ConnectionsClient:
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/execute-connector_Response"
+                                "$ref": (
+                                    "#/components/schemas/execute-connector_Response"
+                                )
                             }
                         }
                     },
@@ -534,7 +548,9 @@ class ConnectionsClient:
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/execute-connector_Response"
+                                "$ref": (
+                                    "#/components/schemas/execute-connector_Response"
+                                )
                             }
                         }
                     },

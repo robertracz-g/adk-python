@@ -60,6 +60,9 @@ class FunctionTool(BaseTool):
     super().__init__(name=name, description=doc)
     self.func = func
     self._ignore_params = ['tool_context', 'input_stream']
+    self._signature = inspect.signature(func)
+    self._valid_params = {param for param in self._signature.parameters}
+    self._mandatory_args = self._compute_mandatory_args()
 
   @override
   def _get_declaration(self) -> Optional[types.FunctionDeclaration]:
@@ -80,13 +83,13 @@ class FunctionTool(BaseTool):
       self, *, args: dict[str, Any], tool_context: ToolContext
   ) -> Any:
     args_to_call = args.copy()
-    signature = inspect.signature(self.func)
-    valid_params = {param for param in signature.parameters}
-    if 'tool_context' in valid_params:
+    if 'tool_context' in self._valid_params:
       args_to_call['tool_context'] = tool_context
 
     # Filter args_to_call to only include valid parameters for the function
-    args_to_call = {k: v for k, v in args_to_call.items() if k in valid_params}
+    args_to_call = {
+        k: v for k, v in args_to_call.items() if k in self._valid_params
+    }
 
     # Before invoking the function, we check for if the list of args passed in
     # has all the mandatory arguments or not.
@@ -126,7 +129,6 @@ You could retry calling this tool, but it is IMPORTANT for you to provide all th
       invocation_context,
   ) -> Any:
     args_to_call = args.copy()
-    signature = inspect.signature(self.func)
     if (
         self.name in invocation_context.active_streaming_tools
         and invocation_context.active_streaming_tools[self.name].stream
@@ -134,23 +136,15 @@ You could retry calling this tool, but it is IMPORTANT for you to provide all th
       args_to_call['input_stream'] = invocation_context.active_streaming_tools[
           self.name
       ].stream
-    if 'tool_context' in signature.parameters:
+    if 'tool_context' in self._valid_params:
       args_to_call['tool_context'] = tool_context
     async for item in self.func(**args_to_call):
       yield item
 
-  def _get_mandatory_args(
-      self,
-  ) -> list[str]:
-    """Identifies mandatory parameters (those without default values) for a function.
-
-    Returns:
-      A list of strings, where each string is the name of a mandatory parameter.
-    """
-    signature = inspect.signature(self.func)
+  def _compute_mandatory_args(self) -> list[str]:
+    """Computes mandatory parameters for a function."""
     mandatory_params = []
-
-    for name, param in signature.parameters.items():
+    for name, param in self._signature.parameters.items():
       # A parameter is mandatory if:
       # 1. It has no default value (param.default is inspect.Parameter.empty)
       # 2. It's not a variable positional (*args) or variable keyword (**kwargs) parameter
@@ -163,3 +157,13 @@ You could retry calling this tool, but it is IMPORTANT for you to provide all th
         mandatory_params.append(name)
 
     return mandatory_params
+
+  def _get_mandatory_args(
+      self,
+  ) -> list[str]:
+    """Identifies mandatory parameters (those without default values) for a function.
+
+    Returns:
+      A list of strings, where each string is the name of a mandatory parameter.
+    """
+    return self._mandatory_args

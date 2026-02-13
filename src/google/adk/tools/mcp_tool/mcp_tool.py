@@ -177,7 +177,8 @@ class MCPTool(BaseAuthenticatedTool):
           # Handle other HTTP schemes with token
           headers = {
               "Authorization": (
-                  f"{credential.http.scheme} {credential.http.credentials.token}"
+                  f"{credential.http.scheme}"
+                  f" {credential.http.credentials.token}"
               )
           }
       elif credential.api_key:

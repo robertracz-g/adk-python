@@ -14,7 +14,6 @@
 
 """Tests for utilities in cli_deploy."""
 
-
 from __future__ import annotations
 
 from pathlib import Path

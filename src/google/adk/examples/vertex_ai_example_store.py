@@ -56,7 +56,9 @@ class VertexAiExampleStore(BaseExampleProvider):
         continue
       expected_contents = [
           content.content
-          for content in result.example.stored_contents_example.contents_example.expected_contents
+          for content in (
+              result.example.stored_contents_example.contents_example.expected_contents
+          )
       ]
       expected_output = []
       for content in expected_contents:
@@ -80,7 +82,9 @@ class VertexAiExampleStore(BaseExampleProvider):
                     name=part.function_response.name,
                     response={
                         key: value
-                        for key, value in part.function_response.response.items()
+                        for key, value in (
+                            part.function_response.response.items()
+                        )
                     },
                 )
             )
