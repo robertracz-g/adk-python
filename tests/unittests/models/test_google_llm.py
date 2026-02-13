@@ -112,7 +112,8 @@ def test_client_version_header():
       f"google-adk/{adk_version.__version__} gl-python/{sys.version.split()[0]}"
   )
   genai_header = (
-      f"google-genai-sdk/{genai_version.__version__} gl-python/{sys.version.split()[0]} "
+      f"google-genai-sdk/{genai_version.__version__}"
+      f" gl-python/{sys.version.split()[0]} "
   )
   expected_header = genai_header + adk_header
 

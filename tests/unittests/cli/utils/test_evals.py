@@ -14,7 +14,6 @@
 
 """Tests for utilities in eval."""
 
-
 from google.adk.cli.utils.evals import convert_session_to_eval_format
 from google.adk.events.event import Event
 from google.adk.sessions.session import Session

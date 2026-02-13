@@ -13,6 +13,7 @@
 # limitations under the License.
 
 """Tests for the Response Evaluator."""
+
 import math
 import random
 from unittest.mock import patch
