@@ -1,0 +1,167 @@
+[
+  {
+    "title": "Deal with these later.",
+    "description": "Deal with these later.",
+    "deepLink": "https://github.com/robertracz-g/adk-python/blob/d4f01afc154461753a8063db5206679783609a36/src/google/adk/models/anthropic_llm.py#L194",
+    "filePath": "src/google/adk/models/anthropic_llm.py",
+    "lineNumber": 194,
+    "confidence": 1,
+    "rationale": "High confidence: The TODO asks to map an Anthropic finish reason to a Google GenAI finish reason. This is a straightforward data mapping task if the enums/types are known.",
+    "context": "          role=\"model\",\n          parts=[content_block_to_part(cb) for cb in message.content],\n      ),\n      usage_metadata=types.GenerateContentResponseUsageMetadata(\n          prompt_token_count=message.usage.input_tokens,\n          candidates_token_count=message.usage.output_tokens,\n          total_token_count=(\n              message.usage.input_tokens + message.usage.output_tokens\n          ),\n      ),\n      # TODO: Deal with these later.\n      # finish_reason=to_google_genai_finish_reason(message.stop_reason),\n  )\n\n\ndef _update_type_string(value_dict: dict[str, Any]):\n  \"\"\"Updates 'type' field to expected JSON schema format.\"\"\"\n  if \"type\" in value_dict:\n    value_dict[\"type\"] = value_dict[\"type\"].lower()\n\n  if \"items\" in value_dict:\n",
+    "language": "python"
+  },
+  {
+    "title": "support service account credential exchanger",
+    "description": "support service account credential exchanger",
+    "deepLink": "https://github.com/robertracz-g/adk-python/blob/d4f01afc154461753a8063db5206679783609a36/src/google/adk/auth/credential_manager.py#L79",
+    "filePath": "src/google/adk/auth/credential_manager.py",
+    "lineNumber": 79,
+    "confidence": 1,
+    "rationale": "High confidence: Supporting a service account credential exchanger likely involves instantiating and registering a new exchanger class similar to the existing OAuth2 one, which is a well-defined pattern.",
+    "context": "\n  def __init__(\n      self,\n      auth_config: AuthConfig,\n  ):\n    self._auth_config = auth_config\n    self._exchanger_registry = CredentialExchangerRegistry()\n    self._refresher_registry = CredentialRefresherRegistry()\n\n    # Register default exchangers and refreshers\n    # TODO: support service account credential exchanger\n    from .refresher.oauth2_credential_refresher import OAuth2CredentialRefresher\n\n    oauth2_refresher = OAuth2CredentialRefresher()\n    self._refresher_registry.register(\n        AuthCredentialTypes.OAUTH2, oauth2_refresher\n    )\n    self._refresher_registry.register(\n        AuthCredentialTypes.OPEN_ID_CONNECT, oauth2_refresher\n    )\n\n",
+    "language": "python"
+  },
+  {
+    "title": "add more logic assertions later.",
+    "description": "add more logic assertions later.",
+    "deepLink": "https://github.com/robertracz-g/adk-python/blob/d4f01afc154461753a8063db5206679783609a36/tests/unittests/agents/test_llm_agent_fields.py#L230",
+    "filePath": "tests/unittests/agents/test_llm_agent_fields.py",
+    "lineNumber": 230,
+    "confidence": 1,
+    "rationale": "High confidence: Adding more logic assertions to a unit test is a standard development task. The context usually provides enough clues on what needs to be asserted.",
+    "context": "  def _before_model_callback(\n      callback_context: CallbackContext,\n      llm_request: LlmRequest,\n  ) -> None:\n    return None\n\n  agent = LlmAgent(\n      name='test_agent', before_model_callback=_before_model_callback\n  )\n\n  # TODO: add more logic assertions later.\n  assert agent.before_model_callback is not None\n\n\ndef test_validate_generate_content_config_thinking_config_throw():\n  with pytest.raises(ValueError):\n    _ = LlmAgent(\n        name='test_agent',\n        generate_content_config=types.GenerateContentConfig(\n            thinking_config=types.ThinkingConfig()\n        ),\n",
+    "language": "python"
+  },
+  {
+    "title": "call_tool uses 'arguments' parameter, not position...",
+    "description": "call_tool uses 'arguments' parameter, not positional args",
+    "deepLink": "https://github.com/robertracz-g/adk-python/blob/d4f01afc154461753a8063db5206679783609a36/tests/unittests/tools/mcp_tool/test_mcp_tool.py#L168",
+    "filePath": "tests/unittests/tools/mcp_tool/test_mcp_tool.py",
+    "lineNumber": 168,
+    "confidence": 1,
+    "rationale": "High confidence: The comment itself provides the fix: 'call_tool uses \"arguments\" parameter, not positional args'. This is a trivial syntax correction in a test file.",
+    "context": "    args = {\"param1\": \"test_value\"}\n\n    result = await tool._run_async_impl(\n        args=args, tool_context=tool_context, credential=None\n    )\n\n    assert result == expected_response\n    self.mock_session_manager.create_session.assert_called_once_with(\n        headers=None\n    )\n    # Fix: call_tool uses 'arguments' parameter, not positional args\n    self.mock_session.call_tool.assert_called_once_with(\n        \"test_tool\", arguments=args\n    )\n\n  @pytest.mark.asyncio\n  async def test_run_async_impl_with_oauth2(self):\n    \"\"\"Test running tool with OAuth2 authentication.\"\"\"\n    tool = MCPTool(\n        mcp_tool=self.mock_mcp_tool,\n        mcp_session_manager=self.mock_session_manager,\n",
+    "language": "python"
+  },
+  {
+    "title": "make new change only store in delta, so that self....",
+    "description": "make new change only store in delta, so that self._value is only",
+    "deepLink": "https://github.com/robertracz-g/adk-python/blob/d4f01afc154461753a8063db5206679783609a36/src/google/adk/sessions/state.py#L42",
+    "filePath": "src/google/adk/sessions/state.py",
+    "lineNumber": 42,
+    "confidence": 2,
+    "rationale": "Medium confidence: Changing how state is stored and committed requires understanding the broader state management lifecycle and storage mechanisms. It's a localized change but has potential side effects on state consistency.",
+    "context": "    self._delta = delta\n\n  def __getitem__(self, key: str) -> Any:\n    \"\"\"Returns the value of the state dict for the given key.\"\"\"\n    if key in self._delta:\n      return self._delta[key]\n    return self._value[key]\n\n  def __setitem__(self, key: str, value: Any):\n    \"\"\"Sets the value of the state dict for the given key.\"\"\"\n    # TODO: make new change only store in delta, so that self._value is only\n    #   updated at the storage commit time.\n    self._value[key] = value\n    self._delta[key] = value\n\n  def __contains__(self, key: str) -> bool:\n    \"\"\"Whether the state dict contains the given key.\"\"\"\n    return key in self._value or key in self._delta\n\n  def has_delta(self) -> bool:\n    \"\"\"Whether the state has pending delta.\"\"\"\n",
+    "language": "python"
+  },
+  {
+    "title": "handle tool append here, instead of in BaseTool.pr...",
+    "description": "handle tool append here, instead of in BaseTool.process_llm_request.",
+    "deepLink": "https://github.com/robertracz-g/adk-python/blob/d4f01afc154461753a8063db5206679783609a36/src/google/adk/flows/llm_flows/basic.py#L78",
+    "filePath": "src/google/adk/flows/llm_flows/basic.py",
+    "lineNumber": 78,
+    "confidence": 2,
+    "rationale": "Medium confidence: Refactoring where tool appends are handled (from BaseTool to BasicLlmRequestProcessor) requires a good understanding of the flow architecture and testing to ensure tools still work correctly after the move.",
+    "context": "    llm_request.live_connect_config.realtime_input_config = (\n        invocation_context.run_config.realtime_input_config\n    )\n    llm_request.live_connect_config.enable_affective_dialog = (\n        invocation_context.run_config.enable_affective_dialog\n    )\n    llm_request.live_connect_config.proactivity = (\n        invocation_context.run_config.proactivity\n    )\n\n    # TODO: handle tool append here, instead of in BaseTool.process_llm_request.\n\n    return\n    yield  # Generator requires yield statement in function body.\n\n\nrequest_processor = _BasicLlmRequestProcessor()\n",
+    "language": "python"
+  },
+  {
+    "title": "Remove this filter and translate unary contents to...",
+    "description": "Remove this filter and translate unary contents to streaming",
+    "deepLink": "https://github.com/robertracz-g/adk-python/blob/d4f01afc154461753a8063db5206679783609a36/src/google/adk/models/gemini_llm_connection.py#L49",
+    "filePath": "src/google/adk/models/gemini_llm_connection.py",
+    "lineNumber": 49,
+    "confidence": 2,
+    "rationale": "Medium confidence: Translating unary contents to streaming contents requires understanding the specific differences in how those content types are structured and handled by the Gemini API.",
+    "context": "    \"\"\"Sends the conversation history to the gemini model.\n\n    You call this method right after setting up the model connection.\n    The model will respond if the last content is from user, otherwise it will\n    wait for new user input before responding.\n\n    Args:\n      history: The conversation history to send to the model.\n    \"\"\"\n\n    # TODO: Remove this filter and translate unary contents to streaming\n    # contents properly.\n\n    # We ignore any audio from user during the agent transfer phase\n    contents = [\n        content\n        for content in history\n        if content.parts and content.parts[0].text\n    ]\n\n    if contents:\n",
+    "language": "python"
+  },
+  {
+    "title": "add more complex error handling",
+    "description": "add more complex error handling",
+    "deepLink": "https://github.com/robertracz-g/adk-python/blob/d4f01afc154461753a8063db5206679783609a36/src/google/adk/memory/vertex_ai_memory_bank_service.py#L118",
+    "filePath": "src/google/adk/memory/vertex_ai_memory_bank_service.py",
+    "lineNumber": 118,
+    "confidence": 2,
+    "rationale": "Medium confidence: Adding more complex error handling is generally straightforward but requires knowing what specific errors need to be caught and how they should be handled (e.g., retries, specific exceptions).",
+    "context": "        },\n    )\n    api_response = _convert_api_response(api_response)\n    logger.info('Search memory response: %s', api_response)\n\n    if not api_response or not api_response.get('retrievedMemories', None):\n      return SearchMemoryResponse()\n\n    memory_events = []\n    for memory in api_response.get('retrievedMemories', []):\n      # TODO: add more complex error handling\n      memory_events.append(\n          MemoryEntry(\n              author='user',\n              content=types.Content(\n                  parts=[types.Part(text=memory.get('memory').get('fact'))],\n                  role='user',\n              ),\n              timestamp=memory.get('updateTime'),\n          )\n      )\n",
+    "language": "python"
+  },
+  {
+    "title": "Add server side filtering by app_name and user_id.",
+    "description": "Add server side filtering by app_name and user_id.",
+    "deepLink": "https://github.com/robertracz-g/adk-python/blob/d4f01afc154461753a8063db5206679783609a36/src/google/adk/memory/vertex_ai_rag_memory_service.py#L126",
+    "filePath": "src/google/adk/memory/vertex_ai_rag_memory_service.py",
+    "lineNumber": 126,
+    "confidence": 2,
+    "rationale": "Medium confidence: Adding server-side filtering by app_name and user_id requires updating the API call parameters or query structure, which relies on the specific Vertex AI API schema.",
+    "context": "        rag_resources=self._vertex_rag_store.rag_resources,\n        rag_corpora=self._vertex_rag_store.rag_corpora,\n        similarity_top_k=self._vertex_rag_store.similarity_top_k,\n        vector_distance_threshold=self._vertex_rag_store.vector_distance_threshold,\n    )\n\n    memory_results = []\n    session_events_map = OrderedDict()\n    for context in response.contexts.contexts:\n      # filter out context that is not related\n      # TODO: Add server side filtering by app_name and user_id.\n      if not context.source_display_name.startswith(f\"{app_name}.{user_id}.\"):\n        continue\n      session_id = context.source_display_name.split(\".\")[-1]\n      events = []\n      if context.text:\n        lines = context.text.split(\"\\n\")\n\n        for line in lines:\n          line = line.strip()\n          if not line:\n",
+    "language": "python"
+  },
+  {
+    "title": "add individual tool with declaration and merge in ...",
+    "description": "add individual tool with declaration and merge in google_llm.py",
+    "deepLink": "https://github.com/robertracz-g/adk-python/blob/d4f01afc154461753a8063db5206679783609a36/src/google/adk/tools/base_tool.py#L129",
+    "filePath": "src/google/adk/tools/base_tool.py",
+    "lineNumber": 129,
+    "confidence": 2,
+    "rationale": "Medium confidence: Adding individual tools with declarations and merging them involves modifying tool registration and schema generation, which needs careful testing.",
+    "context": "      )\n\n  @property\n  def _api_variant(self) -> GoogleLLMVariant:\n    return get_google_llm_variant()\n\n\ndef _find_tool_with_function_declarations(\n    llm_request: LlmRequest,\n) -> Optional[types.Tool]:\n  # TODO: add individual tool with declaration and merge in google_llm.py\n  if not llm_request.config or not llm_request.config.tools:\n    return None\n\n  return next(\n      (\n          tool\n          for tool in llm_request.config.tools\n          if isinstance(tool, types.Tool) and tool.function_declarations\n      ),\n      None,\n",
+    "language": "python"
+  },
+  {
+    "title": "remove this once LRO polling is supported in Expre...",
+    "description": "remove this once LRO polling is supported in Express mode.",
+    "deepLink": "https://github.com/robertracz-g/adk-python/blob/d4f01afc154461753a8063db5206679783609a36/src/google/adk/sessions/vertex_ai_session_service.py#L119",
+    "filePath": "src/google/adk/sessions/vertex_ai_session_service.py",
+    "lineNumber": 119,
+    "confidence": 3,
+    "rationale": "Low confidence: Removing LRO polling depends on 'Express mode' supporting it natively. This relies on external API capabilities and knowing if/when that feature is available, which is out of my control.",
+    "context": "        request_dict=session_json_dict,\n    )\n    api_response = _convert_api_response(api_response)\n    logger.info(f'Create Session response {api_response}')\n\n    session_id = api_response['name'].split('/')[-3]\n    operation_id = api_response['name'].split('/')[-1]\n    if _is_vertex_express_mode(self._project, self._location):\n      # Express mode doesn't support LRO, so we need to poll\n      # the session resource.\n      # TODO: remove this once LRO polling is supported in Express mode.\n      @retry(\n          stop=stop_after_attempt(5),\n          wait=wait_exponential(multiplier=1, min=1, max=3),\n          retry=retry_if_result(lambda response: not response),\n          reraise=True,\n      )\n      async def _poll_session_resource():\n        try:\n          return await self._get_session_api_response(\n              reasoning_engine_id, session_id, api_client\n",
+    "language": "python"
+  },
+  {
+    "title": "revert back(remove timeout) once we move off strea...",
+    "description": "revert back(remove timeout) once we move off streamlit.",
+    "deepLink": "https://github.com/robertracz-g/adk-python/blob/d4f01afc154461753a8063db5206679783609a36/src/google/adk/flows/llm_flows/base_llm_flow.py#L176",
+    "filePath": "src/google/adk/flows/llm_flows/base_llm_flow.py",
+    "lineNumber": 176,
+    "confidence": 3,
+    "rationale": "Low confidence: Removing a timeout that is explicitly added for Streamlit compatibility requires ensuring the project has completely moved off Streamlit or has an alternative way to yield to the event loop. Needs broader project context.",
+    "context": "      llm_connection: BaseLlmConnection,\n      invocation_context: InvocationContext,\n  ):\n    \"\"\"Sends data to model.\"\"\"\n    while True:\n      live_request_queue = invocation_context.live_request_queue\n      try:\n        # Streamlit's execution model doesn't preemptively yield to the event\n        # loop. Therefore, we must explicitly introduce timeouts to allow the\n        # event loop to process events.\n        # TODO: revert back(remove timeout) once we move off streamlit.\n        live_request = await asyncio.wait_for(\n            live_request_queue.get(), timeout=0.25\n        )\n        # duplicate the live_request to all the active streams\n        logger.debug(\n            'Sending live request %s to active streams: %s',\n            live_request,\n            invocation_context.active_streaming_tools,\n        )\n        if invocation_context.active_streaming_tools:\n",
+    "language": "python"
+  },
+  {
+    "title": "Right now, we just support output_transcription wi...",
+    "description": "Right now, we just support output_transcription without",
+    "deepLink": "https://github.com/robertracz-g/adk-python/blob/d4f01afc154461753a8063db5206679783609a36/src/google/adk/models/gemini_llm_connection.py#L179",
+    "filePath": "src/google/adk/models/gemini_llm_connection.py",
+    "lineNumber": 179,
+    "confidence": 3,
+    "rationale": "Low confidence: Supporting output_transcription as a separate field in LlmResponse involves changing core data protocols and interfaces, which is a significant architectural change.",
+    "context": "              )\n          ]\n          llm_response = LlmResponse(\n              content=types.Content(role='user', parts=parts)\n          )\n          yield llm_response\n        if (\n            message.server_content.output_transcription\n            and message.server_content.output_transcription.text\n        ):\n          # TODO: Right now, we just support output_transcription without\n          # changing interface and data protocol. Later, we can consider to\n          # support output_transcription as a separate field in LlmResponse.\n\n          # Transcription is always considered as partial event\n          # We rely on other control signals to determine when to yield the\n          # full text response(turn_complete, interrupted, or tool_call).\n          text += message.server_content.output_transcription.text\n          parts = [\n              types.Part.from_text(\n                  text=message.server_content.output_transcription.text\n",
+    "language": "python"
+  },
+  {
+    "title": "Implement proper cancellation logic if needed",
+    "description": "Implement proper cancellation logic if needed",
+    "deepLink": "https://github.com/robertracz-g/adk-python/blob/d4f01afc154461753a8063db5206679783609a36/src/google/adk/a2a/executor/a2a_agent_executor.py#L112",
+    "filePath": "src/google/adk/a2a/executor/a2a_agent_executor.py",
+    "lineNumber": 112,
+    "confidence": 3,
+    "rationale": "Low confidence: Implementing proper cancellation logic often involves dealing with asynchronous tasks, event loops, and ensuring resources are cleaned up safely, which is generally complex without specific guidance.",
+    "context": "      return resolved_runner\n\n    raise TypeError(\n        'Runner must be a Runner instance or a callable that returns a'\n        f' Runner, got {type(self._runner)}'\n    )\n\n  @override\n  async def cancel(self, context: RequestContext, event_queue: EventQueue):\n    \"\"\"Cancel the execution.\"\"\"\n    # TODO: Implement proper cancellation logic if needed\n    raise NotImplementedError('Cancellation is not supported')\n\n  @override\n  async def execute(\n      self,\n      context: RequestContext,\n      event_queue: EventQueue,\n  ):\n    \"\"\"Executes an A2A request and publishes updates to the event queue\n    specified. It runs as following:\n",
+    "language": "python"
+  },
+  {
+    "title": "To investigate. Unclear why a Type is needed with ...",
+    "description": "To investigate. Unclear why a Type is needed with 'anyOf' to",
+    "deepLink": "https://github.com/robertracz-g/adk-python/blob/d4f01afc154461753a8063db5206679783609a36/src/google/adk/tools/_automatic_function_calling_util.py#L177",
+    "filePath": "src/google/adk/tools/_automatic_function_calling_util.py",
+    "lineNumber": 177,
+    "confidence": 3,
+    "rationale": "Low confidence: The TODO explicitly states 'To investigate. Unclear why...'. Investigating a 400 INVALID_ARGUMENT error from an external API (google.genai) requires debugging the API's specific expectations, which might be tricky.",
+    "context": "    property_schema['type'] = _py_type_2_schema_type.get(\n        property_schema['type'], 'TYPE_UNSPECIFIED'\n    )\n    if property_schema['type'] == 'ARRAY':\n      _map_pydantic_type_to_property_schema(property_schema['items'])\n  for type_ in property_schema.get('anyOf', []):\n    if 'type' in type_:\n      type_['type'] = _py_type_2_schema_type.get(\n          type_['type'], 'TYPE_UNSPECIFIED'\n      )\n      # TODO: To investigate. Unclear why a Type is needed with 'anyOf' to\n      # avoid google.genai.errors.ClientError: 400 INVALID_ARGUMENT.\n      property_schema['type'] = type_['type']\n\n\ndef _map_pydantic_type_to_schema_type(schema: Dict):\n  for _, property_schema in schema.get('properties', {}).items():\n    _map_pydantic_type_to_property_schema(property_schema)\n\n\ndef _get_return_type(func: Callable) -> Any:\n",
+    "language": "python"
+  }
+]
