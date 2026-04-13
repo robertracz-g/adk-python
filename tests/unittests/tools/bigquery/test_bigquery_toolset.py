@@ -37,14 +37,14 @@ async def test_bigquery_toolset_tools_default():
   assert len(tools) == 5
   assert all([isinstance(tool, BigQueryTool) for tool in tools])
 
-  expected_tool_names = set([
+  expected_tool_names = {
       "list_dataset_ids",
       "get_dataset_info",
       "list_table_ids",
       "get_table_info",
       "execute_sql",
-  ])
-  actual_tool_names = set([tool.name for tool in tools])
+  }
+  actual_tool_names = {tool.name for tool in tools}
   assert actual_tool_names == expected_tool_names
 
 
@@ -80,7 +80,7 @@ async def test_bigquery_toolset_tools_selective(selected_tools):
   assert all([isinstance(tool, BigQueryTool) for tool in tools])
 
   expected_tool_names = set(selected_tools)
-  actual_tool_names = set([tool.name for tool in tools])
+  actual_tool_names = {tool.name for tool in tools}
   assert actual_tool_names == expected_tool_names
 
 
@@ -117,5 +117,5 @@ async def test_bigquery_toolset_unknown_tool(selected_tools, returned_tools):
   assert all([isinstance(tool, BigQueryTool) for tool in tools])
 
   expected_tool_names = set(returned_tools)
-  actual_tool_names = set([tool.name for tool in tools])
+  actual_tool_names = {tool.name for tool in tools}
   assert actual_tool_names == expected_tool_names
